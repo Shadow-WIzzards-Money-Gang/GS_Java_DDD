@@ -1,6 +1,7 @@
 package br.com.fiap.space.domain.entity;
 
 import br.com.fiap.space.domain.enums.Terreno;
+import br.com.fiap.space.domain.enums.TipoSonda;
 import br.com.fiap.space.domain.exceptions.BateriaCriticaException;
 import br.com.fiap.space.domain.valueobject.Coordernada;
 import br.com.fiap.space.domain.valueobject.NivelEnergia;
@@ -40,6 +41,7 @@ public abstract class Sonda {
     }
 
     protected abstract void realizarAcaoLocal();
+    public abstract TipoSonda getTipoSonda();
 
     private Double calcularDistancia(Coordernada destino) {
         Integer dx = destino.getEixoX() - posicaoAtual.getEixoX();

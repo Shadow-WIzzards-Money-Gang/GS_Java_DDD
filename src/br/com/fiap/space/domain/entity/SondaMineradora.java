@@ -3,6 +3,7 @@ package br.com.fiap.space.domain.entity;
 import java.util.Random;
 
 import br.com.fiap.space.domain.enums.Recurso;
+import br.com.fiap.space.domain.enums.TipoSonda;
 import br.com.fiap.space.domain.valueobject.CompartimentoCarga;
 import br.com.fiap.space.domain.valueobject.Coordernada;
 import br.com.fiap.space.domain.valueobject.NivelEnergia;
@@ -11,8 +12,9 @@ public class SondaMineradora extends Sonda {
 
     private CompartimentoCarga carga;
 
-    public SondaMineradora(String idSonda, NivelEnergia bateria, Coordernada posicaoAtual) {
+    public SondaMineradora(String idSonda, NivelEnergia bateria, Coordernada posicaoAtual, CompartimentoCarga carga) {
         super(idSonda, bateria, posicaoAtual);
+        this.carga = carga;
     }
 
     @Override
@@ -28,5 +30,14 @@ public class SondaMineradora extends Sonda {
     public void minerar(Recurso recurso, Integer quantidade) {
         this.consumirEnergia(10.0 + (recurso.getPesoPorUnidade() * quantidade));
         this.carga = this.carga.adicionarCarga(recurso, quantidade);
+    }
+
+    @Override
+    public TipoSonda getTipoSonda() {
+        return TipoSonda.MINERADORA;
+    }
+
+    public CompartimentoCarga getCarga() {
+        return carga;
     }
 }
