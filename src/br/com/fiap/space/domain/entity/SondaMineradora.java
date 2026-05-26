@@ -15,8 +15,8 @@ public class SondaMineradora extends Sonda {
 
     private CompartimentoCarga carga;
 
-    public SondaMineradora(String idSonda, NivelEnergia bateria, Coordernada posicaoAtual, CompartimentoCarga carga) {
-        super(idSonda, bateria, posicaoAtual);
+    public SondaMineradora(NivelEnergia bateria, Coordernada posicaoAtual, CompartimentoCarga carga) {
+        super(bateria, posicaoAtual);
         this.carga = carga;
     }
 

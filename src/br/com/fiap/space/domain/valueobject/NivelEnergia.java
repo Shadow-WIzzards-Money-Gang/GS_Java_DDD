@@ -1,18 +1,23 @@
 package br.com.fiap.space.domain.valueobject;
 
 import br.com.fiap.space.domain.exceptions.BateriaCriticaException;
+import br.com.fiap.space.domain.exceptions.CapacidadeBateriaInvalidaException;
 
 public class NivelEnergia {
 
     private Double capacidadeAtual;
     private Double capacidadeMaxima;
 
-    public NivelEnergia() {
-        this.capacidadeAtual = 100.0;
-        this.capacidadeMaxima = 100.0;
-    }
+    public NivelEnergia(Double capacidadeAtual, Double capacidadeMaxima) {
 
-    private NivelEnergia(Double capacidadeAtual, Double capacidadeMaxima) {
+        if (capacidadeAtual > capacidadeMaxima) {
+            throw new CapacidadeBateriaInvalidaException();
+        }
+
+        if (capacidadeAtual < 0 || capacidadeMaxima < 0) {
+            throw new CapacidadeBateriaInvalidaException();
+        }
+
         this.capacidadeAtual = capacidadeAtual;
         this.capacidadeMaxima = capacidadeMaxima;
     }

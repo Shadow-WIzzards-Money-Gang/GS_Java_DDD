@@ -3,23 +3,30 @@ package br.com.fiap.space.domain.entity;
 import br.com.fiap.space.domain.enums.Terreno;
 import br.com.fiap.space.domain.enums.TipoSonda;
 import br.com.fiap.space.domain.exceptions.BateriaCriticaException;
+import br.com.fiap.space.domain.interfaces.Recarregavel;
 import br.com.fiap.space.domain.valueobject.Coordernada;
 import br.com.fiap.space.domain.valueobject.NivelEnergia;
+import br.com.fiap.space.util.SondaUtils;
 
-public abstract class Sonda {
+public abstract class Sonda implements Recarregavel {
 
     private String idSonda;
     private NivelEnergia bateria;
     private Coordernada posicaoAtual;
 
-    public Sonda(String idSonda, NivelEnergia bateria, Coordernada posicaoAtual) {
-        this.idSonda = idSonda;
+    public Sonda(NivelEnergia bateria, Coordernada posicaoAtual) {
+        this.idSonda = SondaUtils.gerarIdSonda();
+        
         this.bateria = bateria;
         this.posicaoAtual = posicaoAtual;
     }
 
+    public void conectarBase() {
+        this.bateria = this.bateria.recarregar();
+    }
+
     public void mover(Coordernada destino, Terreno terreno) {
-        Double distancia = this.calcularDistancia(destino);
+        Double distancia = this.calcularDistancia(destino); 
         Double consumo = this.calcularConsumoEnergia(distancia, terreno);
 
         this.consumirEnergia(consumo);

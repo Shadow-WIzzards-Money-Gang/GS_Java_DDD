@@ -11,8 +11,8 @@ public class SondaExploradora extends Sonda {
 
     private Double alcanceSensor;
 
-    public SondaExploradora(String idSonda, NivelEnergia bateria, Coordernada posicaoAtual, Double alcanceSensor) {
-        super(idSonda, bateria, posicaoAtual);
+    public SondaExploradora(NivelEnergia bateria, Coordernada posicaoAtual, Double alcanceSensor) {
+        super(bateria, posicaoAtual);
         this.alcanceSensor = alcanceSensor;
     }
 
