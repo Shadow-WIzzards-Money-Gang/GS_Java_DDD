@@ -15,6 +15,7 @@ public class CompartimentoCarga {
     public CompartimentoCarga(Double volumeMaximo) {
         this.volumeOcupado = 0.0;
         this.volumeMaximo = volumeMaximo;
+        this.recursos = new HashMap<>();
     }
 
     public CompartimentoCarga(Double volumeOcupado, Double volumeMaximo, HashMap<Recurso, Integer> recursos) {

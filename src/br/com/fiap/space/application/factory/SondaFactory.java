@@ -15,11 +15,12 @@ public class SondaFactory {
         return new SondaExploradora(bateria, coordernada, alcanceSensor);
     }
 
-    public static SondaMineradora criarSondaMineradora(Coordernada coordernada, NivelEnergia bateria, CompartimentoCarga carga) {
+    public static SondaMineradora criarSondaMineradora(Coordernada coordernada, NivelEnergia bateria, Double volumeMaximo) {
+        CompartimentoCarga carga = new CompartimentoCarga(volumeMaximo);
         return new SondaMineradora(bateria, coordernada, carga);
     }
 
-    public static Sonda criarSonda(TipoSonda tipoSonda, Integer eixoX, Integer eixoY, Double nivelBateria, Double capacidadeMaxima, Double alcanceSensor, CompartimentoCarga carga) {
+    public static Sonda criarSonda(TipoSonda tipoSonda, Integer eixoX, Integer eixoY, Double nivelBateria, Double capacidadeMaxima, Double alcanceSensor, Double volumeMaximo) {
         
         Coordernada coordernada = new Coordernada(eixoX, eixoY);
         NivelEnergia bateria = new NivelEnergia(nivelBateria, capacidadeMaxima);
@@ -28,7 +29,7 @@ public class SondaFactory {
             case EXPLORADORA:
                 return SondaFactory.criarSondaExploradora(coordernada, bateria, alcanceSensor);
             case MINERADORA:
-                return SondaFactory.criarSondaMineradora(coordernada, bateria, carga);
+                return SondaFactory.criarSondaMineradora(coordernada, bateria, volumeMaximo);
             default:
                 throw new TipoSondaInvalidoException();
         }

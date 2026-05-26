@@ -9,7 +9,6 @@ import br.com.fiap.space.domain.entity.Sonda;
 import br.com.fiap.space.domain.enums.Terreno;
 import br.com.fiap.space.domain.enums.TipoSonda;
 import br.com.fiap.space.domain.exceptions.SondaNaoEncontradaException;
-import br.com.fiap.space.domain.valueobject.CompartimentoCarga;
 import br.com.fiap.space.domain.valueobject.Coordernada;
 
 public class MissaoService {
@@ -20,11 +19,11 @@ public class MissaoService {
         this.centroDeComando = CentroDeComando.getInstancia();
     }
 
-    public void criarSonda(TipoSonda tipoSonda, Integer eixoX, Integer eixoY, Double nivelBateria, Double capacidadeMaxima, Double alcanceSensor, CompartimentoCarga carga) {
+    public void criarSonda(TipoSonda tipoSonda, Integer eixoX, Integer eixoY, Double nivelBateria, Double capacidadeMaxima, Double alcanceSensor, Double volumeMaximo) {
         
-        /* Carga ou alcanceSensor será null dependendo do tipo de sonda */
+        /* volumeMaximo ou alcanceSensor será null dependendo do tipo de sonda */
 
-        Sonda sonda = SondaFactory.criarSonda(tipoSonda, eixoX, eixoY, nivelBateria, capacidadeMaxima, alcanceSensor, carga);
+        Sonda sonda = SondaFactory.criarSonda(tipoSonda, eixoX, eixoY, nivelBateria, capacidadeMaxima, alcanceSensor, volumeMaximo);
         this.centroDeComando.cadastrarSonda(sonda);
     }
 
