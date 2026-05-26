@@ -21,7 +21,7 @@ public abstract class Sonda {
         Double distancia = this.calcularDistancia(destino);
         Double consumo = this.calcularConsumoEnergia(distancia, terreno);
 
-        this.bateria = this.bateria.consumir(consumo);
+        this.consumirEnergia(consumo);
     
         this.posicaoAtual = destino;
     
@@ -46,6 +46,10 @@ public abstract class Sonda {
         Integer dy = destino.getEixoY() - posicaoAtual.getEixoY();
 
         return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    protected void consumirEnergia(Double consumo) {
+        this.bateria = this.bateria.consumir(consumo);
     }
 
     private Double calcularConsumoEnergia(Double distancia, Terreno terreno) {
