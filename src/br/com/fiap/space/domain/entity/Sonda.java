@@ -32,6 +32,7 @@ public abstract class Sonda {
         this.validarStatusBateria();
         this.mover(destino, terreno);
         this.realizarAcaoLocal();
+        this.enviarRelatorio();
     }
 
     protected void validarStatusBateria() {
@@ -41,6 +42,7 @@ public abstract class Sonda {
     }
 
     protected abstract void realizarAcaoLocal();
+    protected abstract void enviarRelatorio();
     public abstract TipoSonda getTipoSonda();
 
     private Double calcularDistancia(Coordernada destino) {
