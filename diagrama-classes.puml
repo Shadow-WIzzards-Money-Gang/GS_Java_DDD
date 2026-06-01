@@ -1,0 +1,297 @@
+@startuml GS_Java_DDD
+
+skinparam classAttributeIconSize 0
+skinparam class {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor Black
+}
+skinparam note {
+    BackgroundColor LightYellow
+    BorderColor Black
+}
+
+' ===================== ENUMS =====================
+
+enum TipoSonda {
+    EXPLORADORA
+    MINERADORA
+}
+
+enum Recurso {
+    GELO
+    REGOLITO
+    TITANIO
+    --
+    - nome : String
+    - pesoPorUnidade : Double
+    --
+    + getNome() : String
+    + getPesoPorUnidade() : Double
+}
+
+enum Terreno {
+    PLANICIE
+    CRATERA
+    ROCHOSO
+    --
+    - tipoSolo : String
+    - multiplicadorConsumo : Double
+    --
+    + getTipoSolo() : String
+    + getMultiplicadorConsumo() : Double
+}
+
+' ===================== INTERFACES =====================
+
+interface Recarregavel {
+    + conectarBase() : void
+}
+
+interface SondaRepository {
+    + salvar(sonda : Sonda) : void
+    + listar() : List<Sonda>
+    + listarPorTipo(tipo : TipoSonda) : List<Sonda>
+    + buscarPorId(id : String) : Optional<Sonda>
+}
+
+' ===================== VALUE OBJECTS =====================
+
+class Coordernada <<Value Object>> {
+    - eixoX : int
+    - eixoY : int
+    --
+    + getEixoX() : int
+    + getEixoY() : int
+}
+
+class NivelEnergia <<Value Object>> {
+    - capacidadeAtual : Double
+    - capacidadeMaxima : Double
+    --
+    + consumir(consumo : Double) : NivelEnergia
+    + recarregar() : NivelEnergia
+    + getCapacidadeAtual() : Double
+    + getCapacidadeMaxima() : Double
+}
+
+class CompartimentoCarga <<Value Object>> {
+    - volumeOcupado : Double
+    - volumeMaximo : Double
+    - recursos : HashMap<Recurso, Integer>
+    --
+    + adicionarCarga(recurso : Recurso, qtd : Integer) : CompartimentoCarga
+    + getVolumeOcupado() : Double
+    + getVolumeMaximo() : Double
+    + getRecursos() : HashMap<Recurso, Integer>
+}
+
+abstract class Relatorio <<Value Object>> {
+    - idSonda : String
+    - nivelEnergia : NivelEnergia
+    - coordernada : Coordernada
+    - dataHoraGeracao : LocalDateTime
+    --
+    + getIdSonda() : String
+    + getNivelEnergia() : NivelEnergia
+    + getCoordernada() : Coordernada
+    + getDataHoraGeracao() : LocalDateTime
+}
+
+class RelatorioSondaExploradora <<Value Object>> {
+    - areaExplorada : Double
+    --
+    + getAreaExplorada() : Double
+}
+
+class RelatorioSondaMineradora <<Value Object>> {
+    - carga : CompartimentoCarga
+    - recursos : HashMap<Recurso, Integer>
+    --
+    + getCarga() : CompartimentoCarga
+    + getRecursos() : HashMap<Recurso, Integer>
+}
+
+' ===================== ENTIDADES =====================
+
+abstract class Sonda <<Entity>> {
+    - idSonda : String
+    - bateria : NivelEnergia
+    - posicaoAtual : Coordernada
+    --
+    + mover(destino : Coordernada, terreno : Terreno) : void
+    + executarRotinaAutonoma(destino : Coordernada, terreno : Terreno) : void
+    # validarStatusBateria() : void
+    # {abstract} realizarAcaoLocal() : void
+    # {abstract} enviarRelatorio() : void
+    + {abstract} getTipoSonda() : TipoSonda
+    + conectarBase() : void
+    + getIdSonda() : String
+    + getBateria() : NivelEnergia
+    + getPosicaoAtual() : Coordernada
+}
+
+note right of Sonda
+  <b>Template Method</b>
+  executarRotinaAutonoma():
+  1. validarStatusBateria()
+  2. mover()
+  3. realizarAcaoLocal() <<hook>>
+  4. enviarRelatorio()
+end note
+
+class SondaExploradora <<Entity>> {
+    - alcanceSensor : Double
+    --
+    # realizarAcaoLocal() : void
+    # enviarRelatorio() : void
+    + getTipoSonda() : TipoSonda
+    + getAlcanceSensor() : Double
+}
+
+class SondaMineradora <<Entity>> {
+    - carga : CompartimentoCarga
+    --
+    + minerar(recurso : Recurso, qtd : Integer) : void
+    # realizarAcaoLocal() : void
+    # enviarRelatorio() : void
+    + getTipoSonda() : TipoSonda
+    + getCarga() : CompartimentoCarga
+}
+
+' ===================== EXCEÇÕES =====================
+
+class BaseException <<Exception>> {
+}
+
+class BateriaCriticaException <<Exception>> {
+}
+
+class CargaExcedidaException <<Exception>> {
+}
+
+class TerrenoInvalidoException <<Exception>> {
+}
+
+class CoordernadasInvalidasException <<Exception>> {
+}
+
+class SondaNaoEncontradaException <<Exception>> {
+}
+
+class TipoSondaInvalidoException <<Exception>> {
+}
+
+class CapacidadeBateriaInvalidaException <<Exception>> {
+}
+
+' ===================== PADRÕES DE PROJETO =====================
+
+class SondaFactory <<Factory Method>> {
+    + {static} criarSonda(tipo, x, y, bateria, capMax, alcance, volume) : Sonda
+    + {static} criarSondaExploradora(coord, bateria, alcance) : SondaExploradora
+    + {static} criarSondaMineradora(coord, bateria, volume) : SondaMineradora
+}
+
+note bottom of SondaFactory
+  <b>Factory Method</b>
+  Decide qual subclasse
+  instanciar com base no
+  TipoSonda informado.
+end note
+
+class CentroDeComando <<Singleton>> {
+    - {static} instancia : CentroDeComando
+    - sondaRepository : SondaRepository
+    - relatorios : List<Relatorio>
+    --
+    + {static} getInstancia() : CentroDeComando
+    + cadastrarSonda(sonda : Sonda) : void
+    + listarSondas() : List<Sonda>
+    + listarSondasPorTipo(tipo : TipoSonda) : List<Sonda>
+    + buscarSondaPorId(id : String) : Optional<Sonda>
+    + receberRelatorio(relatorio : Relatorio) : void
+    + listarRelatorios() : List<Relatorio>
+}
+
+note bottom of CentroDeComando
+  <b>Singleton</b>
+  Apenas uma instância
+  controla toda a frota.
+end note
+
+class SondaRepositoryImpl <<Infrastructure>> {
+    - {static} instancia : SondaRepositoryImpl
+    - sondas : List<Sonda>
+    --
+    + {static} getInstancia() : SondaRepositoryImpl
+    + salvar(sonda : Sonda) : void
+    + listar() : List<Sonda>
+    + listarPorTipo(tipo : TipoSonda) : List<Sonda>
+    + buscarPorId(id : String) : Optional<Sonda>
+}
+
+class MissaoService <<Application Service>> {
+    - centroDeComando : CentroDeComando
+    --
+    + criarSonda(...) : void
+    + executarRotinaAutonoma(id, x, y, terreno) : void
+    + listarSondas() : List<Sonda>
+    + conectarBase(id : String) : void
+}
+
+class MenuPrincipal <<Presentation>> {
+    - scanner : Scanner
+    - missaoService : MissaoService
+    --
+    + iniciar() : void
+    - lancarSonda() : void
+    - listarSondas() : void
+    - executarRotina() : void
+    - recarregarSonda() : void
+}
+
+' ===================== RELACIONAMENTOS =====================
+
+' Herança de entidades
+Sonda <|-- SondaExploradora
+Sonda <|-- SondaMineradora
+
+' Herança de relatórios
+Relatorio <|-- RelatorioSondaExploradora
+Relatorio <|-- RelatorioSondaMineradora
+
+' Herança de exceções
+BaseException <|-- BateriaCriticaException
+BaseException <|-- CargaExcedidaException
+BaseException <|-- TerrenoInvalidoException
+BaseException <|-- CoordernadasInvalidasException
+BaseException <|-- SondaNaoEncontradaException
+BaseException <|-- TipoSondaInvalidoException
+BaseException <|-- CapacidadeBateriaInvalidaException
+
+' Implementações
+Sonda ..|> Recarregavel
+SondaRepositoryImpl ..|> SondaRepository
+
+' Associações
+Sonda *-- NivelEnergia
+Sonda *-- Coordernada
+SondaMineradora *-- CompartimentoCarga
+CompartimentoCarga --> Recurso
+Sonda --> Terreno
+Relatorio *-- NivelEnergia
+Relatorio *-- Coordernada
+RelatorioSondaMineradora *-- CompartimentoCarga
+
+' Padrões
+SondaFactory ..> SondaExploradora : <<cria>>
+SondaFactory ..> SondaMineradora : <<cria>>
+CentroDeComando --> SondaRepository
+CentroDeComando o-- Relatorio
+SondaRepositoryImpl o-- Sonda
+MissaoService --> CentroDeComando
+MissaoService --> SondaFactory
+MenuPrincipal --> MissaoService
+
+@enduml

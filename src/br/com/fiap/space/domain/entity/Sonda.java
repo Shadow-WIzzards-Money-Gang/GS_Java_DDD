@@ -3,6 +3,7 @@ package br.com.fiap.space.domain.entity;
 import br.com.fiap.space.domain.enums.Terreno;
 import br.com.fiap.space.domain.enums.TipoSonda;
 import br.com.fiap.space.domain.exceptions.BateriaCriticaException;
+import br.com.fiap.space.domain.exceptions.TerrenoInvalidoException;
 import br.com.fiap.space.domain.interfaces.Recarregavel;
 import br.com.fiap.space.domain.valueobject.Coordernada;
 import br.com.fiap.space.domain.valueobject.NivelEnergia;
@@ -26,13 +27,16 @@ public abstract class Sonda implements Recarregavel {
     }
 
     public void mover(Coordernada destino, Terreno terreno) {
-        Double distancia = this.calcularDistancia(destino); 
+        if (terreno == Terreno.CRATERA) {
+            throw new TerrenoInvalidoException();
+        }
+
+        Double distancia = this.calcularDistancia(destino);
         Double consumo = this.calcularConsumoEnergia(distancia, terreno);
 
         this.consumirEnergia(consumo);
-    
+
         this.posicaoAtual = destino;
-    
     }
 
     public void executarRotinaAutonoma(Coordernada destino, Terreno terreno) {

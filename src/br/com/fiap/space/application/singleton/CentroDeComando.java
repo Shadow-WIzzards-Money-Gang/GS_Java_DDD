@@ -52,4 +52,8 @@ public class CentroDeComando {
         this.relatorios.add(relatorio);
     }
 
+    public List<Relatorio> listarRelatorios() {
+        return this.relatorios;
+    }
+
 }

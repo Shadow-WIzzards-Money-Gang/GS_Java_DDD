@@ -18,6 +18,8 @@ public class SondaExploradora extends Sonda {
 
     @Override
     protected void realizarAcaoLocal() {
+        double areaVarredura = Math.PI * alcanceSensor * alcanceSensor;
+        System.out.printf("  [Exploradora] Varrendo área de %.2f km² com alcance de sensor de %.1f km.%n", areaVarredura, alcanceSensor);
         this.consumirEnergia(10.0);
     }
 
