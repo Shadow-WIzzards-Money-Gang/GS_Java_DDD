@@ -31,14 +31,11 @@ public class CompartimentoCarga {
             throw new CargaExcedidaException();
         }
 
-        this.adicionarRecurso(recurso, quantidade);
+        HashMap<Recurso, Integer> novosRecursos = new HashMap<>(this.recursos);
+        Integer quantidadeAtual = novosRecursos.getOrDefault(recurso, 0);
+        novosRecursos.put(recurso, quantidadeAtual + quantidade);
 
-        return new CompartimentoCarga(this.volumeOcupado + pesoTotal, this.volumeMaximo, this.recursos);
-    }
-
-    private void adicionarRecurso(Recurso recurso, Integer quantidade) {
-        Integer quantidadeAtual = this.recursos.getOrDefault(recurso, 0);
-        this.recursos.put(recurso, quantidadeAtual + quantidade);  
+        return new CompartimentoCarga(this.volumeOcupado + pesoTotal, this.volumeMaximo, novosRecursos);
     }
 
     public Double getVolumeOcupado() {
