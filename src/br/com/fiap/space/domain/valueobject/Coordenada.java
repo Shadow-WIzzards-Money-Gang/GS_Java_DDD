@@ -1,16 +1,16 @@
 package br.com.fiap.space.domain.valueobject;
 
-import br.com.fiap.space.domain.exceptions.CoordernadasInvalidasException;
+import br.com.fiap.space.domain.exceptions.CoordenadasInvalidasException;
 
-public class Coordernada {
+public class Coordenada {
 
     private Integer eixoX;
     private Integer eixoY;
 
-    public Coordernada(Integer eixoX, Integer eixoY) {
+    public Coordenada(Integer eixoX, Integer eixoY) {
 
         if (eixoX < 0 || eixoY < 0) {
-            throw new CoordernadasInvalidasException();
+            throw new CoordenadasInvalidasException();
         }
 
         this.eixoX = eixoX;

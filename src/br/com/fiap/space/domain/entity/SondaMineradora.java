@@ -5,8 +5,9 @@ import java.util.Random;
 import br.com.fiap.space.application.singleton.CentroDeComando;
 import br.com.fiap.space.domain.enums.Recurso;
 import br.com.fiap.space.domain.enums.TipoSonda;
+import br.com.fiap.space.domain.exceptions.CargaExcedidaException;
 import br.com.fiap.space.domain.valueobject.CompartimentoCarga;
-import br.com.fiap.space.domain.valueobject.Coordernada;
+import br.com.fiap.space.domain.valueobject.Coordenada;
 import br.com.fiap.space.domain.valueobject.NivelEnergia;
 import br.com.fiap.space.domain.valueobject.Relatorio;
 import br.com.fiap.space.domain.valueobject.RelatorioSondaMineradora;
@@ -15,7 +16,7 @@ public class SondaMineradora extends Sonda {
 
     private CompartimentoCarga carga;
 
-    public SondaMineradora(NivelEnergia bateria, Coordernada posicaoAtual, CompartimentoCarga carga) {
+    public SondaMineradora(NivelEnergia bateria, Coordenada posicaoAtual, CompartimentoCarga carga) {
         super(bateria, posicaoAtual);
         this.carga = carga;
     }
@@ -24,9 +25,12 @@ public class SondaMineradora extends Sonda {
     protected void realizarAcaoLocal() {
         Random random = new Random();
         for (Recurso recurso : Recurso.values()) {
-            // Gera um número aleatório entre 3 e 7
             Integer quantidade = random.nextInt(4) + 3;
-            minerar(recurso, quantidade);
+            try {
+                minerar(recurso, quantidade);
+            } catch (CargaExcedidaException e) {
+                break;
+            }
         }
     }
 
@@ -37,6 +41,9 @@ public class SondaMineradora extends Sonda {
     }
 
     public void minerar(Recurso recurso, Integer quantidade) {
+        if (!this.carga.temCapacidade(recurso, quantidade)) {
+            throw new CargaExcedidaException();
+        }
         this.consumirEnergia(10.0 + (recurso.getPesoPorUnidade() * quantidade));
         this.carga = this.carga.adicionarCarga(recurso, quantidade);
     }

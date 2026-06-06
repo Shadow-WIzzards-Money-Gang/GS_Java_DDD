@@ -24,6 +24,11 @@ public class CompartimentoCarga {
         this.recursos = recursos;
     }
 
+    public boolean temCapacidade(Recurso recurso, Integer quantidade) {
+        Double pesoTotal = recurso.getPesoPorUnidade() * quantidade;
+        return this.volumeOcupado + pesoTotal <= this.volumeMaximo;
+    }
+
     public CompartimentoCarga adicionarCarga(Recurso recurso, Integer quantidade) {
         Double pesoTotal = recurso.getPesoPorUnidade() * quantidade;
 

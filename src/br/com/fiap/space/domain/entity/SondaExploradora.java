@@ -2,7 +2,7 @@ package br.com.fiap.space.domain.entity;
 
 import br.com.fiap.space.application.singleton.CentroDeComando;
 import br.com.fiap.space.domain.enums.TipoSonda;
-import br.com.fiap.space.domain.valueobject.Coordernada;
+import br.com.fiap.space.domain.valueobject.Coordenada;
 import br.com.fiap.space.domain.valueobject.NivelEnergia;
 import br.com.fiap.space.domain.valueobject.Relatorio;
 import br.com.fiap.space.domain.valueobject.RelatorioSondaExploradora;
@@ -11,7 +11,7 @@ public class SondaExploradora extends Sonda {
 
     private Double alcanceSensor;
 
-    public SondaExploradora(NivelEnergia bateria, Coordernada posicaoAtual, Double alcanceSensor) {
+    public SondaExploradora(NivelEnergia bateria, Coordenada posicaoAtual, Double alcanceSensor) {
         super(bateria, posicaoAtual);
         this.alcanceSensor = alcanceSensor;
     }

@@ -8,7 +8,7 @@ public abstract class Relatorio {
 
     private String idSonda;
     private NivelEnergia nivelEnergia;
-    private Coordernada coordernada;
+    private Coordenada coordernada;
 
     private LocalDateTime dataHoraGeracao;
     
@@ -28,7 +28,7 @@ public abstract class Relatorio {
         return nivelEnergia;
     }
 
-    public Coordernada getCoordernada() {
+    public Coordenada getCoordenada() {
         return coordernada;
     }
 

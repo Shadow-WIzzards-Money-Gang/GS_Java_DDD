@@ -24,7 +24,7 @@ public class NivelEnergia {
 
     public NivelEnergia consumir(Double consumo){
         
-        if (consumo > this.capacidadeAtual || consumo > this.capacidadeMaxima) {
+        if (consumo > this.capacidadeAtual) {
             throw new BateriaCriticaException();
         }
             

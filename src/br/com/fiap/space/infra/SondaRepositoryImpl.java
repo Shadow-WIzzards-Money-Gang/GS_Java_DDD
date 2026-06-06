@@ -1,6 +1,7 @@
 package br.com.fiap.space.infra;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -12,7 +13,7 @@ import br.com.fiap.space.domain.interfaces.SondaRepository;
 
 public class SondaRepositoryImpl implements SondaRepository {
 
-    private static SondaRepositoryImpl instancia;
+    private static final SondaRepositoryImpl instancia = new SondaRepositoryImpl();
     private List<Sonda> sondas;
 
     private SondaRepositoryImpl() {
@@ -20,9 +21,6 @@ public class SondaRepositoryImpl implements SondaRepository {
     }
 
     public static SondaRepositoryImpl getInstancia() {
-        if (instancia == null) {
-            instancia = new SondaRepositoryImpl();
-        }
         return instancia;
     }
 
@@ -37,7 +35,7 @@ public class SondaRepositoryImpl implements SondaRepository {
 
     @Override
     public List<Sonda> listar() {
-        return this.sondas;
+        return Collections.unmodifiableList(this.sondas);
     }
 
     @Override

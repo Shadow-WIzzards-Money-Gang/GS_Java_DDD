@@ -1,23 +1,20 @@
 package br.com.fiap.space.util;
 
-import br.com.fiap.space.application.singleton.CentroDeComando;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class SondaUtils {
 
+    private static final AtomicInteger contador = new AtomicInteger(0);
+
     public static String gerarIdSonda() {
-    
-        String prefixo = "SND-00";
-        int totalSondas = CentroDeComando.getInstancia().listarSondas().size();
-        int id = totalSondas + 1;
+        int id = contador.incrementAndGet();
 
-        if (id > 9) {
-            prefixo = "SND-0";
+        if (id <= 9) {
+            return "SND-00" + id;
+        } else if (id <= 99) {
+            return "SND-0" + id;
+        } else {
+            return "SND-" + id;
         }
-
-        if (id > 99) {
-            prefixo = "SND-";
-        }
-    
-        return prefixo + String.valueOf(id);
     }
 }

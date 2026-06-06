@@ -13,7 +13,7 @@ import br.com.fiap.space.infra.SondaRepositoryImpl;
 
 public class CentroDeComando {
 
-    private static CentroDeComando instancia;
+    private static final CentroDeComando instancia = new CentroDeComando();
     private SondaRepository sondaRepository;
     private List<Relatorio> relatorios;
 
@@ -23,9 +23,6 @@ public class CentroDeComando {
     }
 
     public static CentroDeComando getInstancia() {
-        if (instancia == null) {
-            instancia = new CentroDeComando();
-        }
         return instancia;
     }
 
