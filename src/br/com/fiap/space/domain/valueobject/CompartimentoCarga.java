@@ -43,6 +43,10 @@ public class CompartimentoCarga {
         return new CompartimentoCarga(this.volumeOcupado + pesoTotal, this.volumeMaximo, novosRecursos);
     }
 
+    public CompartimentoCarga descarregar() {
+        return new CompartimentoCarga(this.volumeMaximo);
+    }
+
     public Double getVolumeOcupado() {
         return volumeOcupado;
     }

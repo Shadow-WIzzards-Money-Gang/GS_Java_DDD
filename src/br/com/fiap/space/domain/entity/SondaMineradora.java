@@ -24,13 +24,19 @@ public class SondaMineradora extends Sonda {
     @Override
     protected void realizarAcaoLocal() {
         Random random = new Random();
+        boolean minerouAlgo = false;
+
         for (Recurso recurso : Recurso.values()) {
             Integer quantidade = random.nextInt(4) + 3;
-            try {
+            if (this.carga.temCapacidade(recurso, quantidade)) {
                 minerar(recurso, quantidade);
-            } catch (CargaExcedidaException e) {
-                break;
+                minerouAlgo = true;
             }
+        }
+
+        // Carga cheia: nenhum recurso coube. O operador deve ser avisado.
+        if (!minerouAlgo) {
+            throw new CargaExcedidaException();
         }
     }
 
@@ -51,6 +57,17 @@ public class SondaMineradora extends Sonda {
     @Override
     public TipoSonda getTipoSonda() {
         return TipoSonda.MINERADORA;
+    }
+
+    @Override
+    public void conectarBase() {
+        super.conectarBase();
+        this.carga = this.carga.descarregar();
+    }
+
+    @Override
+    protected boolean possuiRodas() {
+        return true;
     }
 
     public CompartimentoCarga getCarga() {

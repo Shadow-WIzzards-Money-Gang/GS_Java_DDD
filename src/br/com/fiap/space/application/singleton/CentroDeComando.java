@@ -49,4 +49,14 @@ public class CentroDeComando {
         this.relatorios.add(relatorio);
     }
 
+    public Optional<Relatorio> buscarUltimoRelatorioPorSonda(String idSonda) {
+        for (int i = this.relatorios.size() - 1; i >= 0; i--) {
+            Relatorio relatorio = this.relatorios.get(i);
+            if (relatorio.getIdSonda().equals(idSonda)) {
+                return Optional.of(relatorio);
+            }
+        }
+        return Optional.empty();
+    }
+
 }

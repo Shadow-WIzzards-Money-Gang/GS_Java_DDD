@@ -10,6 +10,7 @@ import br.com.fiap.space.domain.enums.Terreno;
 import br.com.fiap.space.domain.enums.TipoSonda;
 import br.com.fiap.space.domain.exceptions.SondaNaoEncontradaException;
 import br.com.fiap.space.domain.valueobject.Coordenada;
+import br.com.fiap.space.domain.valueobject.Relatorio;
 
 public class MissaoService {
 
@@ -27,9 +28,10 @@ public class MissaoService {
         this.centroDeComando.cadastrarSonda(sonda);
     }
 
-    public void executarRotinaAutonoma(String idSonda, Integer eixoX, Integer eixoY, Terreno terreno) {
+    public Relatorio executarRotinaAutonoma(String idSonda, Integer eixoX, Integer eixoY, Terreno terreno) {
         Sonda sonda = this.buscarSondaPorId(idSonda);
         sonda.executarRotinaAutonoma(new Coordenada(eixoX, eixoY), terreno);
+        return this.centroDeComando.buscarUltimoRelatorioPorSonda(idSonda).orElse(null);
     }
 
     public List<Sonda> listarSondas() {
